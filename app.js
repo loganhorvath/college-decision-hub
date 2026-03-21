@@ -137,7 +137,7 @@ function initRevealAnimations() {
 function initNavHighlight() {
   const sections = document.querySelectorAll('.section[id]');
   const navTabs = document.querySelectorAll('.nav-tab');
-  const mobileSelect = document.getElementById('mobileNavSelect');
+  const mobileItems = document.querySelectorAll('.mobile-nav-item');
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -145,20 +145,72 @@ function initNavHighlight() {
         navTabs.forEach(tab => {
           tab.classList.toggle('active', tab.getAttribute('href') === '#' + id);
         });
-        // Sync mobile dropdown
-        if (mobileSelect) mobileSelect.value = '#' + id;
+        // Sync mobile dropdown active state
+        mobileItems.forEach(item => {
+          item.classList.toggle('active', item.dataset.section === '#' + id);
+        });
       }
     });
   }, { threshold: 0.3 });
   sections.forEach(s => observer.observe(s));
+}
 
-  // Mobile dropdown navigation
-  if (mobileSelect) {
-    mobileSelect.addEventListener('change', () => {
-      const target = document.querySelector(mobileSelect.value);
+/* ---- Mobile hamburger menu ---- */
+function initMobileMenu() {
+  const toggle = document.getElementById('mobileNavToggle');
+  const dropdown = document.getElementById('mobileNavDropdown');
+  if (!toggle || !dropdown) return;
+
+  function positionDropdown() {
+    const rect = toggle.getBoundingClientRect();
+    dropdown.style.top = (rect.bottom + 8) + 'px';
+  }
+
+  toggle.addEventListener('click', () => {
+    const isOpen = dropdown.classList.toggle('open');
+    toggle.classList.toggle('open', isOpen);
+    if (isOpen) positionDropdown();
+  });
+
+  // Navigate & close on item tap
+  dropdown.querySelectorAll('.mobile-nav-item').forEach(item => {
+    item.addEventListener('click', (e) => {
+      e.preventDefault();
+      dropdown.classList.remove('open');
+      toggle.classList.remove('open');
+      const target = document.querySelector(item.dataset.section);
       if (target) target.scrollIntoView({ behavior: 'smooth' });
     });
-  }
+  });
+
+  // Close when tapping outside
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.mobile-nav')) {
+      dropdown.classList.remove('open');
+      toggle.classList.remove('open');
+    }
+  });
+}
+
+/* ---- Back to top button ---- */
+function initBackToTop() {
+  const btn = document.getElementById('backToTop');
+  if (!btn) return;
+
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(() => {
+        btn.classList.toggle('visible', window.scrollY > 600);
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }, { passive: true });
+
+  btn.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
 }
 
 /* ==========================================================================
@@ -823,4 +875,6 @@ document.addEventListener('DOMContentLoaded', () => {
   renderVerdict();
   initRevealAnimations();
   initNavHighlight();
+  initMobileMenu();
+  initBackToTop();
 });

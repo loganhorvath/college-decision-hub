@@ -96,14 +96,22 @@
         <button class="nav-tab nav-tab-prefs" id="openPrefs" title="Adjust your preference weights">⚙️ My Weights</button>
       </nav>
       <div class="mobile-nav mobile-only" id="mobileNav">
-        <select class="mobile-nav-select" id="mobileNavSelect">
-          <option value="#schools">🏫 Schools</option>
-          <option value="#compare">⚖️ Compare</option>
-          <option value="#rankings">📊 Rankings</option>
-          <option value="#weather">🌤 Climate</option>
-          <option value="#verdict">🏆 Verdict</option>
-        </select>
+        <button class="mobile-nav-toggle" id="mobileNavToggle" aria-label="Open navigation menu">
+          <span class="hamburger-box">
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+          </span>
+          <span class="mobile-nav-toggle-label">Menu</span>
+        </button>
         <button class="mobile-nav-prefs" id="openPrefsMobile" title="Adjust your preference weights">⚙️ My Weights</button>
+        <div class="mobile-nav-dropdown" id="mobileNavDropdown">
+          <a href="#schools" class="mobile-nav-item" data-section="#schools">🏫 Schools</a>
+          <a href="#compare" class="mobile-nav-item" data-section="#compare">⚖️ Compare</a>
+          <a href="#rankings" class="mobile-nav-item" data-section="#rankings">📊 Rankings</a>
+          <a href="#weather" class="mobile-nav-item" data-section="#weather">🌤 Climate</a>
+          <a href="#verdict" class="mobile-nav-item" data-section="#verdict">🏆 Verdict</a>
+        </div>
       </div>
     </div>
   </section>
@@ -185,6 +193,9 @@
       <div class="bottom-line" id="bottomLine"></div>
     </div>
   </section>
+
+  <!-- ============================== BACK TO TOP (MOBILE) ============================== -->
+  <button class="back-to-top mobile-only" id="backToTop" aria-label="Back to top">↑ Top</button>
 
   <!-- ============================== FOOTER ============================== -->
   <footer>
