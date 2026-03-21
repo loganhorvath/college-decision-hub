@@ -76,6 +76,16 @@ function initPreferencesPopup() {
     });
   }
 
+  // Mobile prefs button
+  const openBtnMobile = document.getElementById('openPrefsMobile');
+  if (openBtnMobile) {
+    openBtnMobile.addEventListener('click', (e) => {
+      e.preventDefault();
+      syncSlidersToWeights(activeWeights);
+      overlay.classList.remove('hidden');
+    });
+  }
+
   // Close on overlay click (outside modal)
   overlay.addEventListener('click', (e) => {
     if (e.target === overlay) {
@@ -127,6 +137,7 @@ function initRevealAnimations() {
 function initNavHighlight() {
   const sections = document.querySelectorAll('.section[id]');
   const navTabs = document.querySelectorAll('.nav-tab');
+  const mobileSelect = document.getElementById('mobileNavSelect');
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -134,10 +145,20 @@ function initNavHighlight() {
         navTabs.forEach(tab => {
           tab.classList.toggle('active', tab.getAttribute('href') === '#' + id);
         });
+        // Sync mobile dropdown
+        if (mobileSelect) mobileSelect.value = '#' + id;
       }
     });
   }, { threshold: 0.3 });
   sections.forEach(s => observer.observe(s));
+
+  // Mobile dropdown navigation
+  if (mobileSelect) {
+    mobileSelect.addEventListener('change', () => {
+      const target = document.querySelector(mobileSelect.value);
+      if (target) target.scrollIntoView({ behavior: 'smooth' });
+    });
+  }
 }
 
 /* ==========================================================================
@@ -148,6 +169,7 @@ function renderSchoolCards() {
   const track = document.getElementById('schoolCardsGrid');
   if (!track) return;
   const sorted = [...schools].sort((a, b) => a.verdictRank - b.verdictRank);
+  const isMobile = window.innerWidth <= 640;
 
   track.innerHTML = sorted.map((s, idx) => {
     const scoreColor = s.verdictScore >= 80 ? 'var(--green)' : s.verdictScore >= 60 ? 'var(--amber)' : 'var(--red)';
@@ -168,7 +190,9 @@ function renderSchoolCards() {
       </a>`;
   }).join('');
 
-  initImmersiveCarousel(sorted);
+  if (!isMobile) {
+    initImmersiveCarousel(sorted);
+  }
 }
 
 function initImmersiveCarousel(schoolData) {
@@ -558,6 +582,45 @@ function renderTable() {
     }
     return sortAsc ? va - vb : vb - va;
   });
+
+  // Mobile card view
+  const mobileContainer = document.getElementById('mobileTableCards');
+  if (mobileContainer) {
+    mobileContainer.innerHTML = sorted.map(s => {
+      const isTop = s.verdictScore >= 80;
+      return `
+        <a href="school.html?id=${s.id}" class="mobile-rank-card ${isTop ? 'mobile-rank-top' : ''}">
+          <div class="mobile-rank-header">
+            <span class="mobile-rank-dot" style="background:${s.dot || s.color}"></span>
+            <span class="mobile-rank-name">${s.shortName}</span>
+          </div>
+          <div class="mobile-rank-stats">
+            <div class="mobile-rank-stat">
+              <span class="mobile-rank-label">Overall</span>
+              <span class="mobile-rank-val">#${s.overall}</span>
+            </div>
+            <div class="mobile-rank-stat">
+              <span class="mobile-rank-label">Engineering</span>
+              <span class="mobile-rank-val">#${s.engineering}</span>
+            </div>
+            <div class="mobile-rank-stat">
+              <span class="mobile-rank-label">Accept Rate</span>
+              <span class="mobile-rank-val">${s.acceptance}%</span>
+            </div>
+            <div class="mobile-rank-stat">
+              <span class="mobile-rank-label">Undergrads</span>
+              <span class="mobile-rank-val">${s.population.toLocaleString()}</span>
+            </div>
+            <div class="mobile-rank-stat">
+              <span class="mobile-rank-label">4-Year Cost</span>
+              <span class="mobile-rank-val">$${s.cost.toLocaleString()}</span>
+            </div>
+          </div>
+        </a>`;
+    }).join('');
+  }
+
+  // Desktop table
   tbody.innerHTML = sorted.map(s => {
     const isTop = s.verdictScore >= 80;
     return `

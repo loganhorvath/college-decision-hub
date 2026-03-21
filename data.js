@@ -303,9 +303,9 @@ function celsiusToFahrenheit(c) { return Math.round(c * 9/5 + 32); }
    ========================================================================== */
 
 const defaultWeights = {
-  engineering:  30,   // Engineering program quality
-  community:    25,   // Community fit (culture + size match for ~30K ideal)
-  cost:         20,   // Total 4-year cost / ROI
+  engineering:  20,   // Engineering program quality
+  community:    30,   // Community fit (culture + size match for ~30K ideal)
+  cost:         15,   // Total 4-year cost / ROI
   qualityOfLife: 10,  // Climate, location, lifestyle
   diversity:    10,   // Racial, gender, geographic diversity
   dormQuality:  5     // Housing / dorm experience
