@@ -314,14 +314,21 @@ function initImmersiveCarousel(schoolData) {
     animFrame = requestAnimationFrame(animate);
   }
 
+  // State for touch direction locking
+  let touchDirection = null; // 'horizontal', 'vertical', or null
+  let pointerStartY = 0;
+
   // Pointer events (unified touch + mouse) — weighted drag
   function onPointerDown(e) {
     // Don't start drag from nav zone buttons
     if (e.target.closest('.carousel-zone')) return;
     isPointerDown = true;
     velocity = 0;
+    touchDirection = e.touches ? null : 'horizontal'; // mouse always horizontal, touch needs detection
     const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
     pointerStartX = clientX;
+    pointerStartY = clientY;
     pointerLastX = clientX;
     pointerLastTime = Date.now();
     dragOffset = 0;
@@ -333,6 +340,27 @@ function initImmersiveCarousel(schoolData) {
   function onPointerMove(e) {
     if (!isPointerDown) return;
     const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+    // On touch: determine direction on first significant move
+    if (touchDirection === null && e.touches) {
+      const dx = Math.abs(clientX - pointerStartX);
+      const dy = Math.abs(clientY - pointerStartY);
+      if (dx + dy > 10) { // threshold to decide
+        touchDirection = dx > dy ? 'horizontal' : 'vertical';
+        if (touchDirection === 'vertical') {
+          // Cancel the drag — let the page scroll normally
+          isPointerDown = false;
+          stage.classList.remove('grabbing');
+          return;
+        }
+      } else {
+        return; // wait for a bigger gesture before deciding
+      }
+    }
+
+    if (touchDirection === 'vertical') return;
+
     const now = Date.now();
     const dx = clientX - pointerLastX;
     const dt = Math.max(now - pointerLastTime, 1);
@@ -351,6 +379,7 @@ function initImmersiveCarousel(schoolData) {
   function onPointerUp(e) {
     if (!isPointerDown) return;
     isPointerDown = false;
+    touchDirection = null;
     stage.classList.remove('grabbing');
 
     const clientX = e.changedTouches ? e.changedTouches[0].clientX : e.clientX;
@@ -378,13 +407,16 @@ function initImmersiveCarousel(schoolData) {
   stage.addEventListener('touchmove', onPointerMove, { passive: true });
   stage.addEventListener('touchend', onPointerUp, { passive: true });
 
-  // Wheel scroll — step one card at a time with debounce
+  // Wheel scroll — only capture horizontal scrolls, let vertical scroll pass through
   let wheelLocked = false;
   stage.addEventListener('wheel', (e) => {
+    // Only hijack if the scroll is predominantly horizontal
+    if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return; // let vertical scroll pass through
+
     e.preventDefault();
     if (wheelLocked) return;
 
-    const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+    const delta = e.deltaX;
     if (Math.abs(delta) < 5) return; // ignore tiny scroll
 
     // Step exactly one card in the scroll direction
