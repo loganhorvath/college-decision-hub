@@ -2009,11 +2009,11 @@ footer {
     border-radius: 100px;
   }
   .tab-btn[data-tab="fiske"] {
-    background: linear-gradient(135deg, #f59e0b, #f97316);
+    background: var(--bg-card);
     border-color: #f59e0b;
-    color: #fff;
+    color: #f59e0b;
     font-weight: 700;
-    box-shadow: 0 3px 12px rgba(245,158,11,0.35);
+    box-shadow: 0 3px 12px rgba(245,158,11,0.15);
   }
   .tab-btn[data-tab="fiske"]:active {
     transform: scale(0.97);
@@ -2021,6 +2021,7 @@ footer {
   .tab-btn[data-tab="fiske"].active {
     background: linear-gradient(135deg, #f59e0b, #f97316);
     border-color: #f59e0b;
+    color: #fff;
     box-shadow: 0 4px 16px rgba(245,158,11,0.4);
   }
 
