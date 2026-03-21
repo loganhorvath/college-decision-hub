@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>College Decision Hub — Find Your Perfect Fit</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ============================== PREFERENCES POPUP ============================== -->
+  <div class="prefs-overlay" id="prefsOverlay">
+    <div class="prefs-modal">
+      <div class="prefs-header">
+        <div class="prefs-icon">⚙️</div>
+        <h2>What Matters to You?</h2>
+        <p>Drag the sliders to set how much each factor matters in your school decision. Fit scores update in real time.</p>
+      </div>
+      <div class="prefs-sliders" id="prefsSliders">
+        <div class="pref-slider-row" data-key="engineering">
+          <div class="pref-slider-label">
+            <span class="pref-emoji">🎓</span>
+            <span class="pref-name">Engineering Program</span>
+          </div>
+          <input type="range" min="0" max="100" value="30" class="pref-range" id="pref-engineering">
+          <span class="pref-value" id="prefVal-engineering">30</span>
+        </div>
+        <div class="pref-slider-row" data-key="community">
+          <div class="pref-slider-label">
+            <span class="pref-emoji">🤝</span>
+            <span class="pref-name">Community & Size Fit</span>
+          </div>
+          <input type="range" min="0" max="100" value="25" class="pref-range" id="pref-community">
+          <span class="pref-value" id="prefVal-community">25</span>
+        </div>
+        <div class="pref-slider-row" data-key="cost">
+          <div class="pref-slider-label">
+            <span class="pref-emoji">💰</span>
+            <span class="pref-name">Cost / ROI</span>
+          </div>
+          <input type="range" min="0" max="100" value="20" class="pref-range" id="pref-cost">
+          <span class="pref-value" id="prefVal-cost">20</span>
+        </div>
+        <div class="pref-slider-row" data-key="qualityOfLife">
+          <div class="pref-slider-label">
+            <span class="pref-emoji">🌤</span>
+            <span class="pref-name">Quality of Life</span>
+          </div>
+          <input type="range" min="0" max="100" value="10" class="pref-range" id="pref-qualityOfLife">
+          <span class="pref-value" id="prefVal-qualityOfLife">10</span>
+        </div>
+        <div class="pref-slider-row" data-key="diversity">
+          <div class="pref-slider-label">
+            <span class="pref-emoji">🌍</span>
+            <span class="pref-name">Student Diversity</span>
+          </div>
+          <input type="range" min="0" max="100" value="10" class="pref-range" id="pref-diversity">
+          <span class="pref-value" id="prefVal-diversity">10</span>
+        </div>
+        <div class="pref-slider-row" data-key="dormQuality">
+          <div class="pref-slider-label">
+            <span class="pref-emoji">🏠</span>
+            <span class="pref-name">Dorm Quality</span>
+          </div>
+          <input type="range" min="0" max="100" value="5" class="pref-range" id="pref-dormQuality">
+          <span class="pref-value" id="prefVal-dormQuality">5</span>
+        </div>
+      </div>
+      <div class="prefs-footer">
+        <button class="prefs-reset" id="prefsReset">Reset to Default</button>
+        <button class="prefs-save" id="prefsSave">Apply & Explore →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================== HERO ============================== -->
+  <section class="hero">
+    <div class="hero-bg">
+      <div class="hero-blob blob-1"></div>
+      <div class="hero-blob blob-2"></div>
+      <div class="hero-blob blob-3"></div>
+    </div>
+    <div class="container">
+      <div class="hero-badge"><span class="pulse-dot"></span> Live Data — Updated in Real Time</div>
+      <h1>Find Your <span class="gradient">Perfect Fit</span></h1>
+      <p class="hero-desc">A data-driven, research-backed comparison of 8 universities for a Mechanical Engineering student coming from a small school — built to help you decide with confidence.</p>
+      <nav class="nav-tabs" id="navTabs">
+        <a href="#schools" class="nav-tab">🏫 Schools</a>
+        <a href="#compare" class="nav-tab">⚖️ Compare</a>
+        <a href="#rankings" class="nav-tab">📊 Rankings</a>
+        <a href="#weather" class="nav-tab">🌤 Climate</a>
+        <a href="#verdict" class="nav-tab">🏆 Verdict</a>
+        <button class="nav-tab nav-tab-prefs" id="openPrefs" title="Adjust your preference weights">⚙️ My Weights</button>
+      </nav>
+    </div>
+  </section>
+
+  <!-- ============================== SCHOOL CARDS CAROUSEL ============================== -->
+  <section id="schools" class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-label">🏫 Explore</span>
+        <h2 class="section-title">Choose a School</h2>
+        <p class="section-subtitle">Scroll, swipe, or drag to explore. The focused school sets the mood.</p>
+      </div>
+    </div>
+    <div class="carousel-stage" id="carouselStage">
+      <div class="carousel-glow" id="carouselGlow"></div>
+      <div class="carousel-track" id="schoolCardsGrid"></div>
+      <button class="carousel-zone carousel-zone-left" id="carouselLeft" aria-label="Previous school">‹</button>
+      <button class="carousel-zone carousel-zone-right" id="carouselRight" aria-label="Next school">›</button>
+    </div>
+  </section>
+
+  <!-- ============================== HEAD-TO-HEAD ============================== -->
+  <section id="compare" class="section section-alt">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-label">⚖️ Analysis</span>
+        <h2 class="section-title">Head-to-Head Comparison</h2>
+        <p class="section-subtitle">Key factors broken down side-by-side, ranked by importance for your specific situation.</p>
+      </div>
+      <div class="comparison-cards" id="comparisonCards"></div>
+    </div>
+  </section>
+
+  <!-- ============================== SORTABLE TABLE ============================== -->
+  <section id="rankings" class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-label">📊 Data</span>
+        <h2 class="section-title">Rankings &amp; Statistics</h2>
+        <p class="section-subtitle">Click any column header to sort. Lower rank number = better. Data reflects 2025–26 figures.</p>
+      </div>
+      <div class="table-wrapper">
+        <div class="table-scroll">
+          <table id="dataTable">
+            <thead>
+              <tr>
+                <th data-key="name">University <span class="sort-arrow">⇅</span></th>
+                <th data-key="overall" data-type="number">Overall Rank <span class="sort-arrow">⇅</span></th>
+                <th data-key="engineering" data-type="number">Engineering Rank <span class="sort-arrow">⇅</span></th>
+                <th data-key="acceptance" data-type="number">Acceptance Rate <span class="sort-arrow">⇅</span></th>
+                <th data-key="population" data-type="number">Undergrad Pop. <span class="sort-arrow">⇅</span></th>
+                <th data-key="cost" data-type="number">4-Year Cost <span class="sort-arrow">⇅</span></th>
+              </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== AVERAGE CLIMATE ============================== -->
+  <section id="weather" class="section section-alt">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-label">🌤 Climate</span>
+        <h2 class="section-title">Average School-Year Weather</h2>
+        <p class="section-subtitle">Typical conditions during the academic year (Aug–May) at each campus. Live weather is on each school's profile page.</p>
+      </div>
+      <div class="climate-grid" id="climateGrid"></div>
+    </div>
+  </section>
+
+  <!-- ============================== FINAL VERDICT ============================== -->
+  <section id="verdict" class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-label">🏆 Recommendation</span>
+        <h2 class="section-title">Final Verdict &amp; Fit Scores</h2>
+        <p class="section-subtitle">A weighted score (0–100) calculated from your personal preference sliders. Click <strong>⚙️ My Weights</strong> above to adjust.</p>
+      </div>
+      <div class="verdict-grid" id="verdictGrid"></div>
+      <div class="bottom-line" id="bottomLine"></div>
+    </div>
+  </section>
+
+  <!-- ============================== FOOTER ============================== -->
+  <footer>
+    <div class="container">
+      <p>College Decision Hub · Built with data from the Fiske Guide to Colleges, US News, Open-Meteo API, and program research.</p>
+      <p>Weather updates live · Rankings data: 2025–26 cycle.</p>
+    </div>
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

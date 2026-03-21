@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>School Profile — College Decision Hub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ============================== TOP BAR ============================== -->
+  <nav class="school-topbar">
+    <div class="container topbar-inner">
+      <a href="index.html" class="back-link">← Back to All Schools</a>
+      <span class="topbar-title" id="topbarTitle"></span>
+    </div>
+  </nav>
+
+  <!-- ============================== SCHOOL HERO ============================== -->
+  <section class="school-hero" id="schoolHero">
+    <div class="container">
+      <div class="school-hero-icon" id="heroIcon"></div>
+      <h1 id="heroName"></h1>
+      <p class="school-hero-tagline" id="heroTagline"></p>
+      <div class="school-hero-stats" id="heroStats"></div>
+      <div class="school-hero-tabs">
+        <button class="tab-btn active" data-tab="profile" onclick="switchTab('profile')">📋 Full Profile</button>
+        <button class="tab-btn" data-tab="fiske" onclick="switchTab('fiske')">📖 Fiske Guide</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== WEATHER BAR ============================== -->
+  <section class="school-weather-bar" id="schoolWeatherBar">
+    <div class="container">
+      <div class="school-weather-content" id="schoolWeatherContent">
+        <span class="weather-loading">Loading campus weather...</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== TAB: PROFILE ============================== -->
+  <section class="section tab-content active" id="tab-profile">
+    <div class="container">
+      <div class="profile-sections" id="profileSections"></div>
+    </div>
+  </section>
+
+  <!-- ============================== TAB: FISKE GUIDE ============================== -->
+  <section class="section tab-content" id="tab-fiske">
+    <div class="container">
+      <div class="fiske-container">
+        <div class="fiske-header">
+          <div class="fiske-badge">📖 Fiske Guide to Colleges</div>
+          <h2 id="fiskeName"></h2>
+          <p class="fiske-subtitle">The complete, unedited Fiske Guide profile for this university.</p>
+        </div>
+        <div class="fiske-body" id="fiskeBody">
+          <div class="weather-loading">Loading Fiske Guide content...</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== VERDICT CARD ============================== -->
+  <section class="section" id="schoolVerdictSection">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-label">🏆 Fit Score</span>
+        <h2 class="section-title">Verdict for This School</h2>
+      </div>
+      <div class="school-verdict-card" id="schoolVerdictCard"></div>
+    </div>
+  </section>
+
+  <!-- ============================== NAVIGATION ============================== -->
+  <section class="section school-nav-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-label">🏫 Keep Exploring</span>
+        <h2 class="section-title">Other Schools</h2>
+      </div>
+      <div class="school-nav-grid" id="schoolNavGrid"></div>
+    </div>
+  </section>
+
+  <!-- ============================== FOOTER ============================== -->
+  <footer>
+    <div class="container">
+      <p>College Decision Hub · Built with data from the Fiske Guide to Colleges, US News, Open-Meteo API, and program research.</p>
+      <p>Weather updates live · Rankings data: 2025–26 cycle.</p>
+    </div>
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="school.js"></script>
+</body>
+</html>
